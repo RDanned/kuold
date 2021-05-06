@@ -3,6 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import '@/assets/libs/bootstrap/css/bootstrap.css'
+import { Plugin } from 'vue-fragment'
+
+
+Vue.use(Plugin)
 
 Vue.config.productionTip = false
 

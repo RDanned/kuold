@@ -16,12 +16,15 @@
           </div>
 
           <div class="modal-footer">
-            <slot name="footer">
+            <!-- <slot name="footer">
               default footer
-              <button class="modal-default-button" @click="$emit('close')">
-                OK
-              </button>
-            </slot>
+            </slot> -->
+            <button
+              class="btn btn-primary modal-default-button"
+              @click="$emit('close')"
+            >
+              OK
+            </button>
           </div>
         </div>
       </div>
@@ -29,7 +32,9 @@
   </transition>
 </template>
 <script>
-export default {}
+export default {
+  name: 'Modal'
+}
 </script>
 <style scoped>
 .modal-mask {
@@ -40,23 +45,26 @@ export default {}
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  display: table;
-  transition: opacity 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.1s ease;
 }
 
-.modal-wrapper {
+/* .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
-}
+} */
 
 .modal-container {
-  width: 300px;
+  color: black;
+  width: 1000px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.3s ease;
+  transition: all 0.1s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
 
@@ -72,15 +80,6 @@ export default {}
 .modal-default-button {
   float: right;
 }
-
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
 
 .modal-enter {
   opacity: 0;
