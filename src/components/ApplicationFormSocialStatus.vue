@@ -1,9 +1,9 @@
 <template>
-  <div class="col-md-12 mx-auto rounded bg-white mt-4 bg-white">
+  <div class="col-md-12 mx-auto rounded bg-white mt-4 bg-white border">
     <div class="form-group col-md-12 col-12">
       <br />
-      <label>Социальное положение</label>
-      <p>{{ 'soc stat' }}</p>
+      <label>{{ $t('form.social_status') }}</label>
+      <p>{{ selectedSocialStatus }}</p>
       <button
         type="button"
         class="btn btn-secondary"
@@ -19,7 +19,7 @@
           <div class="modal-container">
             <div class="modal-header">
               <slot name="header"> </slot>
-              <p>Информация о заявителе:</p>
+              <p>Выберите социальное положение:</p>
               <div class="mb-3">
                 <label for="search_status" class="form-label">Поиск</label>
                 <input
@@ -42,14 +42,16 @@
                   name="social_status"
                   :id="`social_status_${socialStatus.id}`"
                   :value="socialStatus.id"
-                  @change="$emit('input', $event.target.value)"
+                  @change="
+                    ;[$emit('input', $event.target.value), setStatus($event)]
+                  "
                   class="form-check-input"
                 />
                 <label
                   :for="`social_status_${socialStatus.id}`"
                   class="form-check-label"
                 >
-                  {{ socialStatus.name_ru }}
+                  {{ socialStatus[`name_${$root.$i18n.locale}`] }}
                 </label>
               </div>
             </div>
@@ -80,7 +82,8 @@ export default {
   data: function() {
     return {
       showModal: false,
-      statuses: this.socialStatuses
+      statuses: this.socialStatuses,
+      selectedSocialStatus: ''
     }
   },
   methods: {
@@ -103,6 +106,13 @@ export default {
         let regex = new RegExp(`(${searchString})`, 'gi')
         if (status.name_ru.search(regex) != -1) return true
         return false
+      })
+    },
+    setStatus: function(e) {
+      let index = e.target.value
+
+      this.socialStatuses.map(status => {
+        if (index == status.id) this.selectedSocialStatus = status.name_ru
       })
     }
   }

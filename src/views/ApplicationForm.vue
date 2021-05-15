@@ -46,7 +46,7 @@
         enctype="multipart/form-data"
       >
         <div class="col-12 bg-white rounded mt-4 border ">
-          <h3 class="mt-3">{{ $t('form.personal_data') }}</h3>
+          <h3 class="mt-3">{{ $t('form.personal_data_title') }}</h3>
           <language-switcher />
 
           <hr />
@@ -54,12 +54,12 @@
           <div class="form-row row-centered  mt-2">
             <div class="form-group">
               <label for="last_name" class="form-label">
-                Фамилия по документам<i style="color: red;">*</i>
+                {{ $t('form.last_name') }}<i style="color: red;">*</i>
               </label>
               <input
                 type="text"
                 id="last_name"
-                placeholder="Фамилия"
+                :placeholder="$t('form.last_name')"
                 class="form-control"
                 v-model="form.last_name"
               />
@@ -67,48 +67,50 @@
 
             <div class="form-group">
               <label for="first_name" class="form-label">
-                Имя<i style="color: red;">*</i>
+                {{ $t('form.first_name') }}<i style="color: red;">*</i>
               </label>
               <input
                 type="text"
                 id="first_name"
-                placeholder="Имя"
+                :placeholder="$t('form.first_name')"
                 class="form-control"
                 v-model="form.first_name"
               />
             </div>
 
             <div class="form-group">
-              <label for="middle_name">Отчество</label>
+              <label for="middle_name">{{ $t('form.middle_name') }}</label>
               <input
                 type="text"
                 id="middle_name"
-                placeholder="Юрьевич"
+                :placeholder="$t('form.personal_data_title')"
                 class="form-control"
                 v-model="form.middle_name"
               />
             </div>
 
             <div class="form-group">
-              <label for="gender">Пол</label>
+              <label for="gender">{{ $t('form.gender.title') }}</label>
               <select
                 name="gender"
                 id="gender"
                 class="form-control"
                 v-model="form.gender"
               >
-                <option value="0" selected>--Выберите из списка--</option>
+                <option value="0" selected
+                  >--{{ $t('form.select_placeholder') }}--</option
+                >
                 <option value="female">
-                  женский
+                  {{ $t('form.gender.male') }}
                 </option>
                 <option value="male">
-                  мужской
+                  {{ $t('form.gender.female') }}
                 </option>
               </select>
             </div>
 
             <div class="form-group">
-              <label for="iin">ИИН</label>
+              <label for="iin">{{ $t('form.iin') }}</label>
               <input
                 type="text"
                 id="iin"
@@ -120,14 +122,19 @@
           </div>
         </div>
 
+        <application-form-social-status
+          :social-statuses="social_statuses"
+          v-model="form.social_status"
+        />
+
         <div class="col-md-12 mx-auto rounded bg-white mt-4 border">
           <div class="form-row row-centered  mt-2">
             <div class="form-group col-md-12 col-12">
-              <label for="PlaceStudy"
-                >Место обучения<i style="color: red;">*</i></label
+              <label for="study_place"
+                >{{ $t('form.study_place') }}<i style="color: red;">*</i></label
               >
               <select
-                id="PlaceStudy"
+                id="study_place"
                 class="form-control"
                 v-model="form.study_place"
               >
@@ -135,41 +142,43 @@
                   v-for="study_place in study_places"
                   :key="study_place.id"
                   :value="study_place.id"
-                  >{{ study_place.name_ru }}</option
+                  >{{ study_place[`name_${$root.$i18n.locale}`] }}</option
                 >
-                <option>Другое</option>
+                <option>{{ $t('form.other_placeholder') }}</option>
               </select>
             </div>
             <div class="form-group col-md-12 col-12">
-              <label for="FormTraining"
-                >Форма оплаты<i style="color: red;">*</i></label
+              <label for="payment_method"
+                >{{ $t('form.payment_method')
+                }}<i style="color: red;">*</i></label
               >
               <select
-                id="FormTraining"
+                id="payment_method"
                 class="form-control"
                 v-model="form.payment_method"
               >
-                <option>Выберите из списка.</option>
+                <option>--{{ $t('form.select_placeholder') }}--</option>
                 <option
                   v-for="payment_method in payment_methods"
                   :key="payment_method.id"
                   :value="payment_method.id"
-                  >{{ payment_method.name_ru }}</option
+                  >{{ payment_method[`name_${$root.$i18n.locale}`] }}</option
                 >
               </select>
             </div>
           </div>
         </div>
         <div class="col-md-12 mx-auto rounded bg-white mt-4 border ">
-          <div class="form-row row-centered  mt-2 ">
+          <h3 class="mt-3">{{ $t('form.contact_info_title') }}</h3>
+          <div class="form-row row-centered  mt-2">
             <div class="form-group col-md-12 col-12">
-              <label for="Place_reg"
-                >Место прописки<i style="color: red;">*</i></label
+              <label for="address"
+                >{{ $t('form.address') }}<i style="color: red;">*</i></label
               >
               <!-- placeholder="Казахстан, Восточно-Казахстанская обл., Усть-Каменогорск" -->
               <input
                 type="text"
-                id="Place_reg"
+                id="address"
                 v-mask=""
                 v-model="form.address"
                 placeholder="Страта, область, город, улица, дом, квартира"
@@ -178,27 +187,29 @@
               />
             </div>
           </div>
-        </div>
-        <hr />
-        <div class="col-md-12 mx-auto rounded bg-white mt-4 border ">
-          <div class="form-row row-centered  mt-2 ">
+
+          <div class="form-row row-centered  mt-2">
             <div class="form-group col-md-12 col-12">
-              <label for="Email"
-                >Email<i style="color: rgb(255, 0, 0);">*</i></label
+              <label for="email">
+                {{ $t('form.email') }}
+                <i style="color: rgb(255, 0, 0);">*</i></label
               >
               <input
                 type="text"
-                id="Email"
-                placeholder="Email"
+                id="email"
+                placeholder="email"
                 class="form-control"
                 v-model="form.email"
               />
             </div>
+          </div>
 
+          <div class="form-row row-centered mt-2">
             <div class="form-group col-md-12 col-12">
-              <label for="phone"
-                >Контактный телефон<i style="color: red;">*</i></label
-              >
+              <label for="phone">
+                {{ $t('form.phone') }}
+                <i style="color: red;">*</i>
+              </label>
               <input
                 type="text"
                 id="phone"
@@ -210,15 +221,11 @@
             </div>
           </div>
         </div>
-        <application-form-social-status
-          :social-statuses="social_statuses"
-          v-model="form.social_status"
-        />
         <button
           class="btn btn-success mt-3 justify-content-center mx-auto"
           type="submit"
         >
-          Отправить.
+          {{ $t('form.submit_btn') }}
         </button>
       </form>
     </div>
