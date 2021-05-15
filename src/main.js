@@ -7,6 +7,7 @@ import { Plugin } from 'vue-fragment'
 import UUID from 'vue-uuid'  
 import VueI18n from 'vue-i18n'
 import ru from '@/lang/ru'
+import en from '@/lang/en'
 import VueMask from 'v-mask'
 
 Vue.use(VueMask);
@@ -19,7 +20,7 @@ const i18n = new VueI18n({
   locale: 'ru',
   messages: {
     'en': {
-      // ...
+      ...en
     },
     'ru': {
       ...ru

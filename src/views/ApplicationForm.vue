@@ -39,47 +39,82 @@
         </div>
       </div>
 
-      <form class="row" @submit.prevent="submitApplication">
+      <form
+        class="row"
+        @submit.prevent="submitApplication"
+        method="POST"
+        enctype="multipart/form-data"
+      >
         <div class="col-12 bg-white rounded mt-4 border ">
-          <h3 class="mt-3">Персональные данные</h3>
+          <h3 class="mt-3">{{ $t('form.personal_data') }}</h3>
+          <language-switcher />
 
           <hr />
 
           <div class="form-row row-centered  mt-2">
             <div class="form-group">
-              <label for="Surname" class="form-label">
+              <label for="last_name" class="form-label">
                 Фамилия по документам<i style="color: red;">*</i>
               </label>
               <input
                 type="text"
-                id="Surname"
+                id="last_name"
                 placeholder="Фамилия"
                 class="form-control"
-                v-model="form.lastname"
+                v-model="form.last_name"
               />
             </div>
 
             <div class="form-group">
-              <label for="Name" class="form-label">
+              <label for="first_name" class="form-label">
                 Имя<i style="color: red;">*</i>
               </label>
               <input
                 type="text"
-                id="Name"
+                id="first_name"
                 placeholder="Имя"
                 class="form-control"
-                v-model="form.firstname"
+                v-model="form.first_name"
               />
             </div>
 
             <div class="form-group">
-              <label for="Patronymic">Отчество</label>
+              <label for="middle_name">Отчество</label>
               <input
                 type="text"
-                id="Patronymic"
+                id="middle_name"
                 placeholder="Юрьевич"
                 class="form-control"
-                v-model="form.middlename"
+                v-model="form.middle_name"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="gender">Пол</label>
+              <select
+                name="gender"
+                id="gender"
+                class="form-control"
+                v-model="form.gender"
+              >
+                <option value="0" selected>--Выберите из списка--</option>
+                <option value="female">
+                  женский
+                </option>
+                <option value="male">
+                  мужской
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="iin">ИИН</label>
+              <input
+                type="text"
+                id="iin"
+                placeholder="1234567890"
+                class="form-control"
+                v-model="form.iin"
               />
             </div>
           </div>
@@ -192,10 +227,11 @@
 <script>
 import formApi from '@/api/form'
 import ApplicationFormSocialStatus from '@/components/ApplicationFormSocialStatus'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 
 export default {
   name: 'ApplicationForm',
-  components: {ApplicationFormSocialStatus},
+  components: {ApplicationFormSocialStatus, LanguageSwitcher},
   data: function() {
     return {
       payment_methods: [],
@@ -206,18 +242,21 @@ export default {
       phoneMask: '+7 (###) ##-##-###',
 
       form: {
-        lastname: '',
-        firstname: '',
-        middlename: '',
+        last_name: 'testlastname',
+        first_name: 'testfirstname',
+        middle_name: 'testmiddlename',
 
-        study_place: {},
-        payment_method: {},
-        social_status: '',
+        iin: '1234567890',
+        gender: 'male',
+
+        study_place: 1,
+        payment_method: 1,
+        social_status: 1,
 
         address: 'Страта, область, город, улица, дом, квартира',
 
-        email: '',
-        phone: ''
+        email: 'test@mail.com',
+        phone: '+77772675809'
       }
     }
   },
@@ -234,9 +273,27 @@ export default {
     console.log(this.form)
   },
   methods: {
-    submitApplication: function() {
-      console.log(this.form.address.split(','))
+    submitApplication: async function() {
       console.log('submit')
+      let fullAddress = this.form.address.split(',')
+      let result = formApi.send({
+        first_name: this.form.first_name,
+        last_name: this.form.last_name,
+        middle_name: this.form.middle_name,
+        iin: this.form.iin,
+        gender: this.form.gender,
+        study_place: this.form.study_place,
+        social_status: this.form.social_status,
+        payment_method: this.form.payment_method,
+
+        country: fullAddress[0],
+        region: fullAddress[1],
+        city: fullAddress[2],
+        street: fullAddress[3],
+        house: fullAddress[4],
+        flat: fullAddress[5]
+      })
+      console.log(result)
     }
   }
 }
