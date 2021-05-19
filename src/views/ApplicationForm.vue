@@ -1,41 +1,43 @@
 <template>
   <div class="bg-light">
-    <div id="schedule" class="container mb-5">
-      <h4 class="mt-4" style="color: rgb(65, 66, 145);">
-        КАЗАХСТАНСКО-АМЕРИКАНСКИЙ СВОБОДНЫЙ УНИВЕРСИТЕТ
-      </h4>
-      <p class="h6 text-body" style="width: 75%;">
-        Городской вуз международного партнерства / Государственная лицензия АБ
-        0137478 Международная аккредитация ACBSP (США) / Институциональная и
-        специализированная аккредитация НКАОКО (Казахстан)
-      </p>
+    <warning />
+    <div class="container form-page">
+      <div class="row form-header">
+        <h4 class="form-title col-10">
+          {{ $t('kafu.title') }}
+        </h4>
+        <p class="form-description col-10">
+          {{ $t('kafu.description') }}
+        </p>
+        <language-switcher class="col-2" />
+      </div>
 
-      <div class="row row-centered  mt-3">
-        <div
-          class="col-md-12 mx-auto rounded bg-white mt-1 border"
-          style='color: white; background-color: rgba(65, 66, 145, 0.94) !important; background-image: linear-gradient(rgba(65, 66, 145, 0.94), rgba(65, 66, 145, 0.94)), url("img/logo_bg_lg.png"); background-position-y: 15px;'
-        >
-          <div class="row row-centered  mt-1">
-            <div class="form-group col-md-3 col-12">
-              <h6>Номера приёмной коммисии</h6>
-              <p class="mb-0">
-                <i aria-hidden="true" class="fas fa-phone-alt mr-2"></i
-                >8(7232)500-300<br />
-                <i aria-hidden="true" class="fas fa-phone-alt mr-2"></i
-                >8(7232)50-50-30<br />
-                <i aria-hidden="true" class="fas fa-phone-alt mr-2"></i
-                >+7-707-440-00-01<br />
-              </p>
-            </div>
-            <div class="form-group col-md-5 col-12"></div>
-            <div class="form-group col-md-4 col-12 d-none d-sm-block">
-              <img
-                :src="require('@/assets/kafu-logo.png')"
-                class="float-right"
-                style="height: 100px; right: 0px;"
-              />
-            </div>
-          </div>
+      <div class="row form-banner">
+        <div class="col-3 form-contacts">
+          <h6>{{ $t('kafu.contacts') }}</h6>
+          <p class="mb-0">
+            <a href="tel:87232500300">
+              <i aria-hidden="true" class="fas fa-phone-alt mr-2"></i>
+              8(7232)500-300
+            </a>
+            <br />
+            <a href="tel:87232505030">
+              <i aria-hidden="true" class="fas fa-phone-alt mr-2"></i>
+              8(7232)50-50-30
+            </a>
+            <br />
+            <a href="tel:77074400001">
+              <i aria-hidden="true" class="fas fa-phone-alt mr-2"></i>
+              +7-707-440-00-01
+            </a>
+            <br />
+          </p>
+        </div>
+        <div class="col-6">
+          {Чем то заполнить, например названием страницы/формы}
+        </div>
+        <div class="col-3">
+          <img :src="require('@/assets/kafu-logo.png')" class="logo" />
         </div>
       </div>
 
@@ -47,14 +49,13 @@
       >
         <div class="col-12 bg-white rounded mt-4 border ">
           <h3 class="mt-3">{{ $t('form.personal_data_title') }}</h3>
-          <language-switcher />
-
+          <input name="lang" type="hidden" :value="$root.$i18n.locale" />
           <hr />
 
           <div class="form-row row-centered  mt-2">
             <div class="form-group">
               <label for="last_name" class="form-label">
-                {{ $t('form.last_name') }}<i style="color: red;">*</i>
+                {{ $t('form.last_name') }}
               </label>
               <input
                 type="text"
@@ -90,7 +91,10 @@
             </div>
 
             <div class="form-group">
-              <label for="gender">{{ $t('form.gender.title') }}</label>
+              <label for="gender"
+                >{{ $t('form.gender.title')
+                }}<i style="color: red;">*</i></label
+              >
               <select
                 name="gender"
                 id="gender"
@@ -117,6 +121,8 @@
                 placeholder="1234567890"
                 class="form-control"
                 v-model="form.iin"
+                v-mask="'################'"
+                :masked="true"
               />
             </div>
           </div>
@@ -138,6 +144,9 @@
                 class="form-control"
                 v-model="form.study_place"
               >
+                <option disabled value="">
+                  --{{ $t('form.select_placeholder') }}--
+                </option>
                 <option
                   v-for="study_place in study_places"
                   :key="study_place.id"
@@ -157,7 +166,9 @@
                 class="form-control"
                 v-model="form.payment_method"
               >
-                <option>--{{ $t('form.select_placeholder') }}--</option>
+                <option disabled value="">
+                  --{{ $t('form.select_placeholder') }}--
+                </option>
                 <option
                   v-for="payment_method in payment_methods"
                   :key="payment_method.id"
@@ -175,11 +186,9 @@
               <label for="address"
                 >{{ $t('form.address') }}<i style="color: red;">*</i></label
               >
-              <!-- placeholder="Казахстан, Восточно-Казахстанская обл., Усть-Каменогорск" -->
               <input
                 type="text"
                 id="address"
-                v-mask=""
                 v-model="form.address"
                 placeholder="Страта, область, город, улица, дом, квартира"
                 class="form-control"
@@ -195,7 +204,7 @@
                 <i style="color: rgb(255, 0, 0);">*</i></label
               >
               <input
-                type="text"
+                type="email"
                 id="email"
                 placeholder="email"
                 class="form-control"
@@ -211,11 +220,12 @@
                 <i style="color: red;">*</i>
               </label>
               <input
-                type="text"
+                type="tel"
                 id="phone"
-                placeholder="+7 (___) __-__-___ "
+                v-mask="'+7 (###) ##-##-###'"
+                placeholder="+7 (___) __-__-___"
+                :masked="true"
                 class="form-control"
-                v-mask="phoneMask"
                 v-model="form.phone"
               />
             </div>
@@ -232,21 +242,22 @@
   </div>
 </template>
 <script>
+import '@/assets/css/form.css'
 import formApi from '@/api/form'
 import ApplicationFormSocialStatus from '@/components/ApplicationFormSocialStatus'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import Warning from '@/components/Warning'
+import {mask} from 'vue-the-mask'
 
 export default {
   name: 'ApplicationForm',
-  components: {ApplicationFormSocialStatus, LanguageSwitcher},
+  components: {ApplicationFormSocialStatus, LanguageSwitcher, Warning},
+  directives: {mask},
   data: function() {
     return {
       payment_methods: [],
       social_statuses: [],
       study_places: [],
-      mask: [/(\.*)/, ', ', /(\.*)/],
-      myInputModel: '',
-      phoneMask: '+7 (###) ##-##-###',
 
       form: {
         last_name: 'testlastname',
@@ -256,9 +267,9 @@ export default {
         iin: '1234567890',
         gender: 'male',
 
-        study_place: 1,
-        payment_method: 1,
-        social_status: 1,
+        study_place: '',
+        payment_method: '',
+        social_status: '',
 
         address: 'Страта, область, город, улица, дом, квартира',
 
@@ -305,13 +316,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-h4 {
-  color: rgb(65, 66, 145);
-}
-
-.form-row {
-  margin-bottom: 1rem;
-}
-</style>

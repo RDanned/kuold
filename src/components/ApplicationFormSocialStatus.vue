@@ -1,16 +1,12 @@
 <template>
   <div class="col-md-12 mx-auto rounded bg-white mt-4 bg-white border">
-    <div class="form-group col-md-12 col-12">
+    <div class="form-group col-md-12 col-12 mb-3">
       <br />
-      <label>{{ $t('form.social_status') }}</label>
+      <label>{{ $t('form.social_status.label') }}</label>
+      <hr />
       <p>{{ selectedSocialStatus }}</p>
-      <button
-        type="button"
-        class="btn btn-secondary"
-        style="width: 100%;"
-        @click="openModal"
-      >
-        Выбрать
+      <button type="button" class="btn btn-secondary" @click="openModal">
+        {{ $t('form.choose_btn') }}
       </button>
     </div>
     <transition name="modal" v-if="showModal">
@@ -19,9 +15,11 @@
           <div class="modal-container">
             <div class="modal-header">
               <slot name="header"> </slot>
-              <p>Выберите социальное положение:</p>
+              <p>{{ $t('form.social_status.title') }}:</p>
               <div class="mb-3">
-                <label for="search_status" class="form-label">Поиск</label>
+                <label for="search_status" class="form-label">{{
+                  $t('form.search')
+                }}</label>
                 <input
                   type="text"
                   class="form-control"
@@ -71,6 +69,8 @@
   </div>
 </template>
 <script>
+import '@/assets/css/modal.css'
+
 export default {
   name: 'ApplicationFormSocialStatus',
   props: {
@@ -120,69 +120,13 @@ export default {
 </script>
 
 <style scoped>
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: opacity 0.1s ease;
-}
-
 .modal-header {
-  display: block;
-}
-
-.modal-wrapper {
-  max-height: 100%;
+  align-items: flex-start;
+  flex-direction: column;
 }
 
 .modal-body {
   max-height: 50vh;
   overflow-y: scroll;
-}
-
-.modal-container {
-  color: black;
-  width: 1000px;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.1s ease;
-  font-family: Helvetica, Arial, sans-serif;
-}
-
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
-
-.modal-body {
-  margin: 20px 0;
-}
-
-.modal-default-button {
-  float: right;
-}
-
-.modal-enter {
-  opacity: 0;
-}
-
-.modal-leave-active {
-  opacity: 0;
-}
-
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
 }
 </style>

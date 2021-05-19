@@ -17,18 +17,6 @@
             </h3>
             <table class="table table-bordered">
               <p>{{ $tc('full_name') }}</p>
-              <!-- <tr v-for="(item, index) in application.applicant" :key="index">
-                <template
-                  v-if="
-                    index != 'social_status' &&
-                      index != 'payment_method' &&
-                      index != 'study_place'
-                  "
-                >
-                  <td>{{ index }}</td>
-                  <td>{{ item }}</td>
-                </template>
-              </tr> -->
               <tr>
                 <td>
                   <b>Пол</b>
@@ -110,6 +98,7 @@
   </transition>
 </template>
 <script>
+import '@/assets/css/modal.css'
 import {uuid} from 'vue-uuid' // Import uuid
 
 export default {
@@ -127,7 +116,7 @@ export default {
 }
 </script>
 <style scoped>
-.modal-mask {
+/* .modal-mask {
   position: fixed;
   z-index: 9998;
   top: 0;
@@ -140,11 +129,6 @@ export default {
   align-items: center;
   transition: opacity 0.1s ease;
 }
-
-/* .modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-} */
 
 .modal-wrapper {
   max-height: 100%;
@@ -188,5 +172,5 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
-}
+} */
 </style>

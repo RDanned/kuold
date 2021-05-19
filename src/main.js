@@ -8,9 +8,9 @@ import UUID from 'vue-uuid'
 import VueI18n from 'vue-i18n'
 import ru from '@/lang/ru'
 import en from '@/lang/en'
-import VueMask from 'v-mask'
+import VueTheMask from 'vue-the-mask'
 
-Vue.use(VueMask);
+Vue.use(VueTheMask)
 Vue.use(Plugin)
 Vue.use(UUID)
 Vue.use(VueI18n)
