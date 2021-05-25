@@ -31,7 +31,8 @@ export default {
   data() {
     return {
       showModal: false,
-      disabled: true
+      disabled: true,
+      errors: {}
     }
   },
   mounted() {

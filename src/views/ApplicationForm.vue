@@ -67,6 +67,10 @@
             </div>
 
             <div class="form-group">
+              <application-form-error
+                v-if="errors.first_name"
+                :error="errors.first_name"
+              />
               <label for="first_name" class="form-label">
                 {{ $t('form.first_name') }}<i style="color: red;">*</i>
               </label>
@@ -74,7 +78,7 @@
                 type="text"
                 id="first_name"
                 :placeholder="$t('form.first_name')"
-                class="form-control"
+                :class="['form-control', {'is-invalid': errors.first_name}]"
                 v-model="form.first_name"
               />
             </div>
@@ -91,6 +95,10 @@
             </div>
 
             <div class="form-group">
+              <application-form-error
+                v-if="errors.gender"
+                :error="errors.gender"
+              />
               <label for="gender"
                 >{{ $t('form.gender.title')
                 }}<i style="color: red;">*</i></label
@@ -98,12 +106,12 @@
               <select
                 name="gender"
                 id="gender"
-                class="form-control"
+                :class="['form-control', {'is-invalid': errors.gender}]"
                 v-model="form.gender"
               >
-                <option value="0" selected
-                  >--{{ $t('form.select_placeholder') }}--</option
-                >
+                <option value="" disabled selected>
+                  --{{ $t('form.select_placeholder') }}--
+                </option>
                 <option value="female">
                   {{ $t('form.gender.male') }}
                 </option>
@@ -114,14 +122,15 @@
             </div>
 
             <div class="form-group">
+              <application-form-error v-if="errors.iin" :error="errors.iin" />
               <label for="iin">{{ $t('form.iin') }}</label>
               <input
                 type="text"
                 id="iin"
                 placeholder="1234567890"
-                class="form-control"
+                :class="['form-control', {'is-invalid': errors.iin}]"
                 v-model="form.iin"
-                v-mask="'################'"
+                v-mask="'############'"
                 :masked="true"
               />
             </div>
@@ -136,12 +145,16 @@
         <div class="col-md-12 mx-auto rounded bg-white mt-4 border">
           <div class="form-row row-centered  mt-2">
             <div class="form-group col-md-12 col-12">
+              <application-form-error
+                v-if="errors.study_place"
+                :error="errors.study_place"
+              />
               <label for="study_place"
                 >{{ $t('form.study_place') }}<i style="color: red;">*</i></label
               >
               <select
                 id="study_place"
-                class="form-control"
+                :class="['form-control', {'is-invalid': errors.study_place}]"
                 v-model="form.study_place"
               >
                 <option disabled value="">
@@ -151,19 +164,23 @@
                   v-for="study_place in study_places"
                   :key="study_place.id"
                   :value="study_place.id"
-                  >{{ study_place[`name_${$root.$i18n.locale}`] }}</option
+                  >{{ study_place[name_lang] }}</option
                 >
                 <option>{{ $t('form.other_placeholder') }}</option>
               </select>
             </div>
             <div class="form-group col-md-12 col-12">
+              <application-form-error
+                v-if="errors.payment_method"
+                :error="errors.payment_method"
+              />
               <label for="payment_method"
                 >{{ $t('form.payment_method')
                 }}<i style="color: red;">*</i></label
               >
               <select
                 id="payment_method"
-                class="form-control"
+                :class="['form-control', {'is-invalid': errors.payment_method}]"
                 v-model="form.payment_method"
               >
                 <option disabled value="">
@@ -173,7 +190,7 @@
                   v-for="payment_method in payment_methods"
                   :key="payment_method.id"
                   :value="payment_method.id"
-                  >{{ payment_method[`name_${$root.$i18n.locale}`] }}</option
+                  >{{ payment_method[name_lang] }}</option
                 >
               </select>
             </div>
@@ -183,6 +200,10 @@
           <h3 class="mt-3">{{ $t('form.contact_info_title') }}</h3>
           <div class="form-row row-centered  mt-2">
             <div class="form-group col-md-12 col-12">
+              <application-form-error
+                v-if="errors.address"
+                :error="errors.address"
+              />
               <label for="address"
                 >{{ $t('form.address') }}<i style="color: red;">*</i></label
               >
@@ -191,7 +212,7 @@
                 id="address"
                 v-model="form.address"
                 placeholder="Страта, область, город, улица, дом, квартира"
-                class="form-control"
+                :class="['form-control', {'is-invalid': errors.address}]"
                 value="Страта, область, город, улица, дом, квартира"
               />
             </div>
@@ -199,6 +220,10 @@
 
           <div class="form-row row-centered  mt-2">
             <div class="form-group col-md-12 col-12">
+              <application-form-error
+                v-if="errors.email"
+                :error="errors.email"
+              />
               <label for="email">
                 {{ $t('form.email') }}
                 <i style="color: rgb(255, 0, 0);">*</i></label
@@ -207,7 +232,8 @@
                 type="email"
                 id="email"
                 placeholder="email"
-                class="form-control"
+                :class="['form-control', {'is-invalid': errors.email}]"
+                :masked="true"
                 v-model="form.email"
               />
             </div>
@@ -215,6 +241,10 @@
 
           <div class="form-row row-centered mt-2">
             <div class="form-group col-md-12 col-12">
+              <application-form-error
+                v-if="errors.phone"
+                :error="errors.phone"
+              />
               <label for="phone">
                 {{ $t('form.phone') }}
                 <i style="color: red;">*</i>
@@ -225,7 +255,7 @@
                 v-mask="'+7 (###) ##-##-###'"
                 placeholder="+7 (___) __-__-___"
                 :masked="true"
-                class="form-control"
+                :class="['form-control', {'is-invalid': errors.phone}]"
                 v-model="form.phone"
               />
             </div>
@@ -245,19 +275,29 @@
 import '@/assets/css/form.css'
 import formApi from '@/api/form'
 import ApplicationFormSocialStatus from '@/components/ApplicationFormSocialStatus'
+import ApplicationFormError from '@/components/ApplicationFormError'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Warning from '@/components/Warning'
 import {mask} from 'vue-the-mask'
 
 export default {
   name: 'ApplicationForm',
-  components: {ApplicationFormSocialStatus, LanguageSwitcher, Warning},
+  components: {
+    ApplicationFormSocialStatus,
+    LanguageSwitcher,
+    Warning,
+    ApplicationFormError
+  },
   directives: {mask},
   data: function() {
     return {
+      isSubmitted: false,
+
       payment_methods: [],
       social_statuses: [],
       study_places: [],
+
+      errors: {},
 
       form: {
         last_name: 'testlastname',
@@ -265,7 +305,7 @@ export default {
         middle_name: 'testmiddlename',
 
         iin: '1234567890',
-        gender: 'male',
+        gender: '',
 
         study_place: '',
         payment_method: '',
@@ -279,19 +319,70 @@ export default {
     }
   },
   created: async function() {
-    let data = await formApi.getFormData()
-    data = data.data
-    this.payment_methods = data.payment_methods
-    this.social_statuses = data.social_statuses
-    this.study_places = data.study_places
-
-    console.log(data)
+    let formData = await formApi.getFormData()
+    formData = formData.data
+    this.payment_methods = formData.payment_methods
+    this.social_statuses = formData.social_statuses
+    this.study_places = formData.study_places
   },
-  updated: function() {
-    console.log(this.form)
+  watch: {
+    form: {
+      handler: function(value) {
+        if (this.isSubmitted) this.validate(value)
+        /* if (value.iin.length != 12)
+          this.errors.iin = 'В ИИН должно быть 12 цифр!'
+        else this.errors.iin = '' */
+      },
+      deep: true
+    }
+  },
+  computed: {
+    name_lang: function() {
+      return `name_${this.$root.$i18n.locale}`
+    }
   },
   methods: {
-    submitApplication: async function() {
+    validate: function(data) {
+      console.log(data)
+
+      if (data.iin.length != 0 && data.iin.length != 12)
+        this.errors.iin = 'Длина ИИН должна быть 12 цифр!'
+      else this.errors.iin = ''
+
+      if (!data.gender) this.errors.gender = 'Укажите пол!'
+      else this.errors.gender = ''
+
+      if (!data.first_name) this.errors.first_name = 'Укажите ваше имя!'
+      else this.errors.first_name = ''
+
+      if (!data.study_place) this.errors.study_place = 'Укажите место обучения!'
+      else this.errors.study_place = ''
+
+      if (!data.payment_method)
+        this.errors.payment_method = 'Укажите формат оплаты!'
+      else this.errors.payment_method = ''
+
+      if (!data.address) this.errors.address = 'Укажите адрес прописки!'
+      else this.errors.address = ''
+
+      if (!data.email) this.errors.email = 'Укажите ваш email!'
+      else this.errors.email = ''
+
+      if (!data.phone) this.errors.phone = 'Укажите ваш номер телефона!'
+      else this.errors.phone = ''
+
+      if (Object.keys(this.errors).length != 0) return false
+      return true
+    },
+    submitApplication: async function(e) {
+      this.errors = {}
+      console.log(e)
+
+      if (!this.validate(this.form)) {
+        this.isSubmitted = true
+        return
+      }
+
       console.log('submit')
       let fullAddress = this.form.address.split(',')
       let result = formApi.send({

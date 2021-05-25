@@ -49,7 +49,7 @@
                   :for="`social_status_${socialStatus.id}`"
                   class="form-check-label"
                 >
-                  {{ socialStatus[`name_${$root.$i18n.locale}`] }}
+                  {{ socialStatus[name_lang] }}
                 </label>
               </div>
             </div>
@@ -104,7 +104,7 @@ export default {
 
       this.statuses = this.socialStatuses.filter(status => {
         let regex = new RegExp(`(${searchString})`, 'gi')
-        if (status.name_ru.search(regex) != -1) return true
+        if (status[this.name_lang].search(regex) != -1) return true
         return false
       })
     },
@@ -114,6 +114,11 @@ export default {
       this.socialStatuses.map(status => {
         if (index == status.id) this.selectedSocialStatus = status.name_ru
       })
+    }
+  },
+  computed: {
+    name_lang: function() {
+      return `name_${this.$root.$i18n.locale}`
     }
   }
 }
