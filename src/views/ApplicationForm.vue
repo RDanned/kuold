@@ -1,5 +1,6 @@
 <template>
   <div class="bg-light">
+    <preloader v-if="isLoading" />
     <warning />
     <div class="container form-page">
       <div class="row form-header">
@@ -28,7 +29,7 @@
             <br />
             <a href="tel:77074400001">
               <i aria-hidden="true" class="fas fa-phone-alt mr-2"></i>
-              +7-707-440-00-01
+              +7-707-440-00-01var(--dark-blue)
             </a>
             <br />
           </p>
@@ -48,6 +49,15 @@
         enctype="multipart/form-data"
       >
         <div class="col-12 bg-white rounded mt-4 border ">
+          <ul id="form-errors" class="form-errors" v-if="this.generalErrors">
+            <li
+              v-for="error in this.generalErrors"
+              :key="error"
+              class="form-error text-danger"
+            >
+              {{ error }}
+            </li>
+          </ul>
           <h3 class="mt-3">{{ $t('form.personal_data_title') }}</h3>
           <input name="lang" type="hidden" :value="$root.$i18n.locale" />
           <hr />
@@ -278,19 +288,24 @@ import ApplicationFormSocialStatus from '@/components/ApplicationFormSocialStatu
 import ApplicationFormError from '@/components/ApplicationFormError'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Warning from '@/components/Warning'
+import Preloader from '@/components/Preloader'
 import {mask} from 'vue-the-mask'
 
+//todo: Вынести инпуты в ApplicationFormInput
+//todo: Вынести селекты в ApplicationFormSelect
 export default {
   name: 'ApplicationForm',
   components: {
     ApplicationFormSocialStatus,
     LanguageSwitcher,
     Warning,
-    ApplicationFormError
+    ApplicationFormError,
+    Preloader
   },
   directives: {mask},
   data: function() {
     return {
+      isLoading: false,
       isSubmitted: false,
 
       payment_methods: [],
@@ -299,12 +314,14 @@ export default {
 
       errors: {},
 
+      generalErrors: [],
+
       form: {
         last_name: 'testlastname',
         first_name: 'testfirstname',
         middle_name: 'testmiddlename',
 
-        iin: '1234567890',
+        iin: '123456789012',
         gender: '',
 
         study_place: '',
@@ -334,6 +351,13 @@ export default {
         else this.errors.iin = '' */
       },
       deep: true
+    },
+    isLoading: {
+      handler: function(value) {
+        console.log('IsLoading')
+        console.log(value)
+      },
+      deep: true
     }
   },
   computed: {
@@ -343,17 +367,17 @@ export default {
   },
   methods: {
     validate: function(data) {
-      console.log(data)
+      console.log(this.errors)
 
-      if (data.iin.length != 0 && data.iin.length != 12)
-        this.errors.iin = 'Длина ИИН должна быть 12 цифр!'
-      else this.errors.iin = ''
+      if (!data.first_name) this.errors.first_name = 'Укажите ваше имя!'
+      else this.errors.first_name = ''
 
       if (!data.gender) this.errors.gender = 'Укажите пол!'
       else this.errors.gender = ''
 
-      if (!data.first_name) this.errors.first_name = 'Укажите ваше имя!'
-      else this.errors.first_name = ''
+      if (data.iin.length != 0 && data.iin.length != 12)
+        this.errors.iin = 'Длина ИИН должна быть 12 цифр!'
+      else this.errors.iin = ''
 
       if (!data.study_place) this.errors.study_place = 'Укажите место обучения!'
       else this.errors.study_place = ''
@@ -371,37 +395,68 @@ export default {
       if (!data.phone) this.errors.phone = 'Укажите ваш номер телефона!'
       else this.errors.phone = ''
 
-      if (Object.keys(this.errors).length != 0) return false
+      for (const [, value] of Object.entries(this.errors))
+        if (value) return false
+
+      //if (Object.keys(this.errors).length != 0) return false
+
       return true
     },
-    submitApplication: async function(e) {
+    submitApplication: function(e) {
       this.errors = {}
       console.log(e)
 
       if (!this.validate(this.form)) {
         this.isSubmitted = true
+
+        for (let key in this.errors)
+          if (this.errors[key]) {
+            console.log('scroll to: ', key)
+            document.querySelector(`#${key}`).scrollIntoView()
+            break
+          }
+
         return
       }
 
       console.log('submit')
       let fullAddress = this.form.address.split(',')
-      let result = formApi.send({
-        first_name: this.form.first_name,
-        last_name: this.form.last_name,
-        middle_name: this.form.middle_name,
-        iin: this.form.iin,
-        gender: this.form.gender,
-        study_place: this.form.study_place,
-        social_status: this.form.social_status,
-        payment_method: this.form.payment_method,
 
-        country: fullAddress[0],
-        region: fullAddress[1],
-        city: fullAddress[2],
-        street: fullAddress[3],
-        house: fullAddress[4],
-        flat: fullAddress[5]
-      })
+      this.isLoading = true
+
+      let result = formApi
+        .send({
+          first_name: this.form.first_name,
+          last_name: this.form.last_name,
+          middle_name: this.form.middle_name,
+          iin: this.form.iin,
+          gender: this.form.gender,
+          study_place: this.form.study_place,
+          social_status: this.form.social_status,
+          payment_method: this.form.payment_method,
+
+          country: fullAddress[0],
+          region: fullAddress[1],
+          city: fullAddress[2],
+          street: fullAddress[3],
+          house: fullAddress[4],
+          flat: fullAddress[5],
+
+          email: this.form.email,
+          phone: this.form.phone
+        })
+        .then(response => {
+          response = response.data
+
+          if (!response.success) {
+            this.generalErrors = response.errors
+            document.querySelector('#form-errors').scrollIntoView()
+          } else {
+            this.generalErrors = []
+          }
+        })
+
+      this.isLoading = false
       console.log(result)
     }
   }
