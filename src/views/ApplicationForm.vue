@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-light">
+  <div class="bg-light form-wrapper">
     <preloader v-if="isLoading" />
     <warning />
     <div class="container form-page">
@@ -38,11 +38,21 @@
           {Чем то заполнить, например названием страницы/формы}
         </div>
         <div class="col-3">
-          <img :src="require('@/assets/kafu-logo.png')" class="logo" />
+          <img :src="require('@/assets/img/kafu-logo.png')" class="logo" />
         </div>
       </div>
 
+      <div
+        v-if="isSuccess"
+        class="col-12 bg-white rounded mt-4 pb-4 pt-4 border"
+      >
+        <div class="form-success">
+          <font-awesome-icon icon="check" />
+        </div>
+        <div class="form-success__text">Ваша заявка отправлена.</div>
+      </div>
       <form
+        v-else
         class="row"
         @submit.prevent="submitApplication"
         method="POST"
@@ -307,6 +317,7 @@ export default {
     return {
       isLoading: false,
       isSubmitted: false,
+      isSuccess: false,
 
       payment_methods: [],
       social_statuses: [],
@@ -404,6 +415,7 @@ export default {
     },
     submitApplication: function(e) {
       this.errors = {}
+      this.generalErrors = []
       console.log(e)
 
       if (!this.validate(this.form)) {
@@ -453,6 +465,7 @@ export default {
             document.querySelector('#form-errors').scrollIntoView()
           } else {
             this.generalErrors = []
+            this.isSuccess = true
           }
         })
 
