@@ -30,6 +30,7 @@
   </div>
 </template>
 <script>
+import '@/assets/libs/bootstrap/js/bootstrap'
 import {mapState} from 'vuex'
 import {actionTypes} from '@/store/modules/admin'
 import ListItem from '@/components/ListItem'
