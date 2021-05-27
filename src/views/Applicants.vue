@@ -1,5 +1,6 @@
 <template>
   <div>
+    <admin-panel />
     <table class="table table-striped table-dark">
       <thead>
         <tr>
@@ -35,10 +36,11 @@ import {mapState} from 'vuex'
 import {actionTypes} from '@/store/modules/admin'
 import ListItem from '@/components/ListItem'
 import ListItemDetail from '@/components/ListItemDetail'
+import AdminPanel from '@/components/AdminPanel'
 
 export default {
   name: 'Applicants',
-  components: {ListItem, ListItemDetail},
+  components: {ListItem, ListItemDetail, AdminPanel},
   data() {
     return {
       showModal: false,
@@ -59,7 +61,6 @@ export default {
       this.modalApplication = this.data.filter(app => {
         return app.id == id
       })[0]
-      console.log(this.modalApplication)
       this.showModal = true
     },
     closeModal: function() {
