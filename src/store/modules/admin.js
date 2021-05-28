@@ -12,7 +12,8 @@ export const mutationTypes = {
   setApplicationStatus: '[admin] Application status sat',
   setSettlementStatus: '[admin] Settlement status sat',
   setSearchString: '[admin] Set search string mutation',
-  softDeleteApplication: '[admin] Soft delete application mutation'
+  softDeleteApplication: '[admin] Soft delete application mutation',
+  restoreApplication: '[admin] Restore softly deleted application mutation'
 }
 
 export const actionTypes = {
@@ -20,7 +21,8 @@ export const actionTypes = {
   setApplicationStatus: '[admin] Set application status',
   setSettlementStatus: '[admin] Set settlement status',
   setSearchString: '[admin] Set search string action',
-  softDeleteApplication: '[admin] Soft delete application action'
+  softDeleteApplication: '[admin] Soft delete application action',
+  restoreApplication: '[admin] Restore softly deleted application action'
 }
 
 const mutations = {
@@ -55,6 +57,16 @@ const mutations = {
         application.deleted = true
         application.applicant.deleted = true
         application.settlement.deleted = true
+      }
+    })
+  },
+  [mutationTypes.restoreApplication](state, payload) {
+    let applicationId = payload.applicationId
+    state.data.forEach(application => {
+      if (application.id == applicationId) {
+        application.deleted = false
+        application.applicant.deleted = false
+        application.settlement.deleted = false
       }
     })
   }
@@ -106,6 +118,17 @@ const actions = {
     return new Promise(resolve => {
       adminApi.deleteApplication({type: 'soft', applicationId}).then(() => {
         context.commit(mutationTypes.softDeleteApplication, {
+          applicationId,
+          type: 'soft'
+        })
+        resolve(applicationId)
+      })
+    })
+  },
+  [actionTypes.restoreApplication](context, {applicationId}) {
+    return new Promise(resolve => {
+      adminApi.restoreApplication({type: 'soft', applicationId}).then(() => {
+        context.commit(mutationTypes.restoreApplication, {
           applicationId,
           type: 'soft'
         })

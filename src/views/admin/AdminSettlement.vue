@@ -67,14 +67,13 @@ export default {
           })
         }
 
-        console.log(state.admin.data)
         if (state.admin.data)
           return state.admin.data.filter(application => {
-            console.log(application.deleted)
+            console.log(application)
             if (
               !application.deleted &&
-              application.status != 1 &&
-              application.settlement.status != 1
+              application.status == 1 &&
+              application.settlement.status == 1
             )
               return true
           })

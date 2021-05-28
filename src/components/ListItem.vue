@@ -73,10 +73,18 @@
         Ещё...
       </button>
       <button
+        v-if="!application.deleted"
         class="trash-btn btn btn-warning mt-0 float-left"
         @click="deleteApplication"
       >
         <font-awesome-icon icon="trash" />
+      </button>
+      <button
+        v-else
+        class="trash-btn btn btn-warning mt-0 float-left"
+        @click="restoreApplication"
+      >
+        <font-awesome-icon icon="trash-restore" />
       </button>
     </td>
   </tr>
@@ -161,6 +169,11 @@ export default {
     },
     deleteApplication: function() {
       this.$store.dispatch(actionTypes.softDeleteApplication, {
+        applicationId: this.application.id
+      })
+    },
+    restoreApplication: function() {
+      this.$store.dispatch(actionTypes.restoreApplication, {
         applicationId: this.application.id
       })
     }

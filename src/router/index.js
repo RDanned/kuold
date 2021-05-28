@@ -4,8 +4,9 @@ import VueRouter from 'vue-router'
 import ApplicationForm from '@/views/ApplicationForm'
 import Applicants from '@/views/Applicants'
 import Admin from '@/views/Admin'
-import Settlement from '@/views/Settlement'
+//import Settlement from '@/views/Settlement'
 import AdminBasket from '@/views/admin/AdminBasket'
+import AdminSettlement from '@/views/admin/AdminSettlement'
 
 Vue.use(VueRouter)
 
@@ -43,7 +44,7 @@ const routes = [
       {
         path: 'settlement/',
         name: 'settlement',
-        component: Settlement
+        component: AdminSettlement
       },
       {
         path: 'basket/',

@@ -19,8 +19,16 @@ const deleteApplication = ({type, applicationId}) => {
   })
 }
 
+const restoreApplication = ({type, applicationId}) => {
+  return axios.patch(`${applicationId}/restore/`, {
+    application_id: applicationId,
+    type: type
+  })
+}
+
 export default {
   getApplicants,
   setStatus,
-  deleteApplication
+  deleteApplication,
+  restoreApplication
 }
