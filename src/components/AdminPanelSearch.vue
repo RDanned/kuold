@@ -19,7 +19,6 @@ export default {
   methods: {
     search: function(e) {
       let searchString = e.target.value
-      console.log(searchString)
       this.$store.dispatch(actionTypes.setSearchString, {searchString})
     }
   }

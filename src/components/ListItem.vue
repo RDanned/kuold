@@ -6,7 +6,7 @@
         `${application.applicant.last_name} ${application.applicant.first_name} ${application.applicant.middle_name}`
       }}
     </td>
-    <td>{{ application.applicant.gender }}</td>
+    <td>{{ $t('form.gender.' + application.applicant.gender) }}</td>
     <td>{{ application.applicant.study_place.name_ru }}</td>
     <td>
       <div class="dropdown">
@@ -72,18 +72,20 @@
       >
         Ещё...
       </button>
-      удалить
+      <button
+        class="trash-btn btn btn-warning mt-0 float-left"
+        @click="deleteApplication"
+      >
+        <font-awesome-icon icon="trash" />
+      </button>
     </td>
   </tr>
 </template>
 <script>
-//import {Fragment} from 'vue-fragment'
-//import Modal from '@/components/Modal'
 import {actionTypes} from '@/store/modules/admin'
 
 export default {
   name: 'ListItem',
-  //components: {Modal},
   props: {
     application: {
       type: Object,
@@ -99,8 +101,6 @@ export default {
   },
   computed: {
     applicationStatus: function() {
-      console.log('computed')
-      console.log(this.application.status)
       let output = ''
       switch (this.application.status) {
         case 0:
@@ -158,6 +158,11 @@ export default {
           applicationId: this.application.id,
           status: Number(e.currentTarget.dataset.status)
         })
+    },
+    deleteApplication: function() {
+      this.$store.dispatch(actionTypes.softDeleteApplication, {
+        applicationId: this.application.id
+      })
     }
   }
 }

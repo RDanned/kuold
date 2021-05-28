@@ -11,14 +11,16 @@ export const mutationTypes = {
   getDataSuccess: '[admin] Get data success',
   setApplicationStatus: '[admin] Application status sat',
   setSettlementStatus: '[admin] Settlement status sat',
-  setSearchString: '[admin] Set search string mutation'
+  setSearchString: '[admin] Set search string mutation',
+  softDeleteApplication: '[admin] Soft delete application mutation'
 }
 
 export const actionTypes = {
   getData: '[admin] Get data',
   setApplicationStatus: '[admin] Set application status',
   setSettlementStatus: '[admin] Set settlement status',
-  setSearchString: '[admin] Set search string action'
+  setSearchString: '[admin] Set search string action',
+  softDeleteApplication: '[admin] Soft delete application action'
 }
 
 const mutations = {
@@ -45,6 +47,16 @@ const mutations = {
   [mutationTypes.setSearchString](state, payload) {
     let searchString = payload.searchString
     state.searchString = searchString
+  },
+  [mutationTypes.softDeleteApplication](state, payload) {
+    let applicationId = payload.applicationId
+    state.data.forEach(application => {
+      if (application.id == applicationId) {
+        application.deleted = true
+        application.applicant.deleted = true
+        application.settlement.deleted = true
+      }
+    })
   }
 }
 
@@ -88,6 +100,18 @@ const actions = {
   },
   [actionTypes.setSearchString](context, {searchString}) {
     context.commit(mutationTypes.setSearchString, {searchString})
+  },
+  [actionTypes.softDeleteApplication](context, {applicationId}) {
+    //context.commit(mutationTypes.softDeleteApplication, {applicationId})
+    return new Promise(resolve => {
+      adminApi.deleteApplication({type: 'soft', applicationId}).then(() => {
+        context.commit(mutationTypes.softDeleteApplication, {
+          applicationId,
+          type: 'soft'
+        })
+        resolve(applicationId)
+      })
+    })
   }
 }
 

@@ -9,6 +9,7 @@
   </div>
 </template>
 <script>
+import '@/assets/css/admin.css'
 import AdminMenu from '@/components/AdminMenu'
 
 export default {

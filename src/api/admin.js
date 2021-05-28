@@ -12,7 +12,15 @@ const setStatus = ({type, applicationId, status}) => {
   })
 }
 
+const deleteApplication = ({type, applicationId}) => {
+  return axios.patch(`${applicationId}/delete/`, {
+    application_id: applicationId,
+    type: type
+  })
+}
+
 export default {
   getApplicants,
-  setStatus
+  setStatus,
+  deleteApplication
 }

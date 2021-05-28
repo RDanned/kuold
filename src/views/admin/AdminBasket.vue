@@ -70,7 +70,7 @@ export default {
         if (state.admin.data)
           return state.admin.data.filter(application => {
             console.log(application.deleted)
-            if (!application.deleted) return true
+            if (application.deleted) return true
           })
         else return []
       }

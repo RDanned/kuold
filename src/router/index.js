@@ -5,6 +5,7 @@ import ApplicationForm from '@/views/ApplicationForm'
 import Applicants from '@/views/Applicants'
 import Admin from '@/views/Admin'
 import Settlement from '@/views/Settlement'
+import AdminBasket from '@/views/admin/AdminBasket'
 
 Vue.use(VueRouter)
 
@@ -43,6 +44,11 @@ const routes = [
         path: 'settlement/',
         name: 'settlement',
         component: Settlement
+      },
+      {
+        path: 'basket/',
+        name: 'basket',
+        component: AdminBasket
       }
     ]
   }
