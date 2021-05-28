@@ -49,7 +49,26 @@ export default {
   },
   computed: {
     ...mapState({
-      data: state => state.admin.data
+      data: state => {
+        let searchString = state.admin.searchString
+
+        if (searchString) {
+          return state.admin.data.filter(application => {
+            let fullName =
+              application.applicant.last_name +
+              application.applicant.first_name +
+              application.applicant.middle_name
+
+            let regex = new RegExp(`(${searchString})`, 'gi')
+
+            if (fullName.search(regex) != -1) return true
+
+            return false
+          })
+        }
+
+        return state.admin.data
+      }
     })
   },
   mounted() {

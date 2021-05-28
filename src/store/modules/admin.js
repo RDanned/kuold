@@ -3,19 +3,22 @@
 import adminApi from '@/api/admin'
 
 const state = {
-  data: null
+  data: null,
+  searchString: null
 }
 
 export const mutationTypes = {
   getDataSuccess: '[admin] Get data success',
   setApplicationStatus: '[admin] Application status sat',
-  setSettlementStatus: '[admin] Settlement status sat'
+  setSettlementStatus: '[admin] Settlement status sat',
+  setSearchString: '[admin] Set search string mutation'
 }
 
 export const actionTypes = {
   getData: '[admin] Get data',
   setApplicationStatus: '[admin] Set application status',
-  setSettlementStatus: '[admin] Set settlement status'
+  setSettlementStatus: '[admin] Set settlement status',
+  setSearchString: '[admin] Set search string action'
 }
 
 const mutations = {
@@ -38,6 +41,10 @@ const mutations = {
       if (application.id == applicationId)
         application.settlement.status = status
     })
+  },
+  [mutationTypes.setSearchString](state, payload) {
+    let searchString = payload.searchString
+    state.searchString = searchString
   }
 }
 
@@ -78,6 +85,9 @@ const actions = {
           resolve(applicationId)
         })
     })
+  },
+  [actionTypes.setSearchString](context, {searchString}) {
+    context.commit(mutationTypes.setSearchString, {searchString})
   }
 }
 
