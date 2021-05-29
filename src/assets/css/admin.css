@@ -1,3 +1,14 @@
 .trash-btn {
     margin-left: 20px;
 }
+
+.sort-btn {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    user-select: none;
+}
+
+.sort-btn__icon {
+    margin-left: auto;
+}

@@ -4,7 +4,11 @@ import adminApi from '@/api/admin'
 
 const state = {
   data: null,
-  searchString: null
+  searchString: null,
+  sortApplications: {
+    by: 'id',
+    direction: 'desc'
+  }
 }
 
 export const mutationTypes = {
@@ -13,7 +17,8 @@ export const mutationTypes = {
   setSettlementStatus: '[admin] Settlement status sat',
   setSearchString: '[admin] Set search string mutation',
   softDeleteApplication: '[admin] Soft delete application mutation',
-  restoreApplication: '[admin] Restore softly deleted application mutation'
+  restoreApplication: '[admin] Restore softly deleted application mutation',
+  setApplicationSort: '[admin] Set application sort mutation'
 }
 
 export const actionTypes = {
@@ -22,7 +27,8 @@ export const actionTypes = {
   setSettlementStatus: '[admin] Set settlement status',
   setSearchString: '[admin] Set search string action',
   softDeleteApplication: '[admin] Soft delete application action',
-  restoreApplication: '[admin] Restore softly deleted application action'
+  restoreApplication: '[admin] Restore softly deleted application action',
+  setApplicationSort: '[admin] Set application sort action'
 }
 
 const mutations = {
@@ -69,13 +75,16 @@ const mutations = {
         application.settlement.deleted = false
       }
     })
+  },
+  [mutationTypes.setApplicationSort](state, payload) {
+    state.sortApplications.by = payload.by
+    state.sortApplications.direction = payload.direction
   }
 }
 
 const actions = {
   [actionTypes.getData](context, {apiUrl}) {
     return new Promise(resolve => {
-      //context.commit(mutationTypes.getFeedStart)
       adminApi.getApplicants(apiUrl).then(response => {
         context.commit(mutationTypes.getDataSuccess, response.data)
         resolve(response.data)
@@ -97,7 +106,6 @@ const actions = {
     })
   },
   [actionTypes.setSettlementStatus](context, {applicationId, status}) {
-    console.log('setSettlementStatus')
     return new Promise(resolve => {
       adminApi
         .setStatus({type: 'settlement', applicationId, status})
@@ -135,6 +143,9 @@ const actions = {
         resolve(applicationId)
       })
     })
+  },
+  [actionTypes.setApplicationSort](context, {by, direction}) {
+    context.commit(mutationTypes.setApplicationSort, {by, direction})
   }
 }
 
