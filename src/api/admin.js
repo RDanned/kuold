@@ -26,9 +26,45 @@ const restoreApplication = ({type, applicationId}) => {
   })
 }
 
+const getApplicationStatuses = () => {
+  return [
+    {
+      id: 0,
+      name_ru: 'На рассмотрении'
+    },
+    {
+      id: 1,
+      name_ru: 'Одобрено'
+    },
+    {
+      id: 2,
+      name_ru: 'Отказано'
+    }
+  ]
+}
+
+const getSettlementStatuses = () => {
+  return [
+    {
+      id: 0,
+      name_ru: 'Не вселён'
+    },
+    {
+      id: 1,
+      name_ru: 'Вселён'
+    },
+    {
+      id: 2,
+      name_ru: 'Выслен'
+    }
+  ]
+}
+
 export default {
   getApplicants,
   setStatus,
   deleteApplication,
-  restoreApplication
+  restoreApplication,
+  getApplicationStatuses,
+  getSettlementStatuses
 }

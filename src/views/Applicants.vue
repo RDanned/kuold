@@ -21,6 +21,7 @@
               </span>
             </div>
           </td>
+
           <td>
             <div
               class="sort-btn"
@@ -38,14 +39,38 @@
               </span>
             </div>
           </td>
+
           <td>Пол</td>
+
           <td>Место обучения</td>
-          <td>Статус заявки</td>
+
+          <td>
+            <div
+              class="sort-btn"
+              data-by="application_status"
+              data-direction="desc"
+              @click="sortApplications"
+            >
+              <span class="sort-btn__text"> Статус заявки</span>
+              <span class="sort-btn__icon">
+                <font-awesome-icon
+                  v-if="
+                    sort.direction === 'desc' &&
+                      sort.by === 'application_status'
+                  "
+                  icon="sort-amount-up"
+                />
+                <font-awesome-icon v-else icon="sort-amount-down-alt" />
+              </span>
+            </div>
+          </td>
+
           <td>Статус вселения</td>
+
           <td>Действия</td>
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="data">
         <list-item
           v-for="application in data"
           :key="application.id"
@@ -102,17 +127,17 @@ export default {
           })
         }
 
-        if (state.admin.data)
+        if (state.admin.data.length)
           output = state.admin.data.filter(application => {
             if (
               !application.deleted &&
-              application.status != 1 &&
-              application.settlement.status != 1
+              (application.status == 0 || application.settlement.status == 0) &&
+              (application.status == 1 || application.settlement.status == 0)
             )
               return true
           })
 
-        if (output) {
+        if (output.length) {
           output = output.sort((app1, app2) => {
             if (state.admin.sortApplications.by === 'id') {
               if (state.admin.sortApplications.direction == 'desc') {
@@ -123,13 +148,6 @@ export default {
                 else return 1
               }
             } else if (state.admin.sortApplications.by === 'full_name') {
-              /*if(state.admin.sortApplications.direction == 'desc') {
-                return new Intl.Collator('ru', {caseFirst: 'upper'}).compare(
-                    app1.applicant.full_name,
-                    app2.applicant.full_name
-                )
-              }*/
-
               if (state.admin.sortApplications.direction == 'desc') {
                 if (app1.applicant.full_name < app2.applicant.full_name)
                   return 1
@@ -140,8 +158,72 @@ export default {
                   return -1
                 else return 1
               }
+            } else if (
+              state.admin.sortApplications.by === 'application_status'
+            ) {
+              if (state.admin.sortApplications.direction == 'desc') {
+                if (app1.status < app2.status) return 1
+                else return -1
+              }
+              if (state.admin.sortApplications.direction == 'asc') {
+                if (app1.status < app2.status) return -1
+                else return 1
+              }
             }
           })
+        }
+
+        if (state.admin.filter.length) {
+          console.log('filter')
+          console.log(state.admin.filter)
+          console.log(output.length)
+
+          if (output.length) {
+            output = output.filter(application => {
+              let isPass = []
+
+              state.admin.filter.map(item => {
+                switch (item.by) {
+                  case 'payment_method':
+                    if (application.applicant.payment_method.id == item.value)
+                      isPass.push(true)
+                    break
+                  case 'application_status':
+                    if (application.status == item.value) isPass.push(true)
+                    break
+                  case 'settlement_status':
+                    if (application.settlement.status == item.value)
+                      isPass.push(true)
+                    break
+                  case 'study_place':
+                    if (application.applicant.study_place.id == item.value)
+                      isPass.push(true)
+                    break
+                  /*default:
+                    isPass = true*/
+                }
+
+                /*if (item.by == 'payment_method') {
+                  if (application.applicant.payment_method.id == item.value)
+                    isPass = true
+                } else if (item.by == 'application_status') {
+                  if (application.status == item.value) isPass = true
+                } else if (item.by == 'settlement_status') {
+                  if (application.settlement.status == item.value) isPass = true
+                } else if (item.by == 'study_place') {
+                  console.log(item.by)
+                  if (application.applicant.study_place.id == item.value)
+                    isPass = true
+                }*/
+              })
+
+              console.log('is pass')
+              console.log(isPass)
+
+              if (isPass.length == state.admin.filter.length) return true
+              return false
+            })
+          }
         }
 
         return output

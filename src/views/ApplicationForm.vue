@@ -29,7 +29,7 @@
             <br />
             <a href="tel:77074400001">
               <i aria-hidden="true" class="fas fa-phone-alt mr-2"></i>
-              +7-707-440-00-01var(--dark-blue)
+              +7-707-440-00-01
             </a>
             <br />
           </p>

@@ -3,12 +3,14 @@
 import adminApi from '@/api/admin'
 
 const state = {
-  data: null,
+  data: [],
   searchString: null,
   sortApplications: {
     by: 'id',
     direction: 'desc'
-  }
+  },
+  //filter: [{by: 'study', value: '1'},{...}]
+  filter: []
 }
 
 export const mutationTypes = {
@@ -18,7 +20,8 @@ export const mutationTypes = {
   setSearchString: '[admin] Set search string mutation',
   softDeleteApplication: '[admin] Soft delete application mutation',
   restoreApplication: '[admin] Restore softly deleted application mutation',
-  setApplicationSort: '[admin] Set application sort mutation'
+  setApplicationSort: '[admin] Set application sort mutation',
+  setFilter: '[admin] Append filter mutation'
 }
 
 export const actionTypes = {
@@ -28,7 +31,9 @@ export const actionTypes = {
   setSearchString: '[admin] Set search string action',
   softDeleteApplication: '[admin] Soft delete application action',
   restoreApplication: '[admin] Restore softly deleted application action',
-  setApplicationSort: '[admin] Set application sort action'
+  setApplicationSort: '[admin] Set application sort action',
+  appendFilter: '[admin] Append filter action',
+  resetFilter: '[admin] Clear filter action'
 }
 
 const mutations = {
@@ -41,6 +46,7 @@ const mutations = {
 
     state.data.forEach(application => {
       if (application.id == applicationId) application.status = status
+      if (status == 0) application.settlement.status = 0
     })
   },
   [mutationTypes.setSettlementStatus](state, payload) {
@@ -79,6 +85,9 @@ const mutations = {
   [mutationTypes.setApplicationSort](state, payload) {
     state.sortApplications.by = payload.by
     state.sortApplications.direction = payload.direction
+  },
+  [mutationTypes.setFilter](state, payload) {
+    state.filter = payload.filter
   }
 }
 
@@ -146,6 +155,34 @@ const actions = {
   },
   [actionTypes.setApplicationSort](context, {by, direction}) {
     context.commit(mutationTypes.setApplicationSort, {by, direction})
+  },
+  [actionTypes.appendFilter](context, {filter}) {
+    let newFilter = []
+
+    if (!context.state.filter) {
+      newFilter = [...context.state.filter, filter]
+    } else {
+      let isNew = true
+
+      newFilter = context.state.filter.map(item => {
+        if (item.by === filter.by) {
+          item.value = filter.value
+          isNew = false
+        }
+        return item
+      })
+
+      if (isNew) newFilter = [...context.state.filter, filter]
+    }
+
+    context.commit(mutationTypes.setFilter, {
+      filter: newFilter
+    })
+  },
+  [actionTypes.resetFilter](context) {
+    context.commit(mutationTypes.setFilter, {
+      filter: []
+    })
   }
 }
 
