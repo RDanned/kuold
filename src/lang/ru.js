@@ -1,6 +1,13 @@
 export default {
   full_name: 'Полное имя',
 
+  admin: {
+    study_place: 'Место обучения',
+    payment_method: 'Способ оплаты',
+    application_status: 'Статус заявки',
+    settlement_status: 'Статус заселения'
+  },
+
   kafu: {
     title: 'Казахстанско-американский свободный университет',
     description: `Городской вуз международного партнерства / Государственная лицензия АБ

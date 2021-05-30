@@ -12,3 +12,12 @@
 .sort-btn__icon {
     margin-left: auto;
 }
+
+.admin-filter {
+    display: flex;
+    justify-content: space-between;
+}
+
+.admin-print {
+    color: #fff;
+}

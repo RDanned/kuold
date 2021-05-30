@@ -26,6 +26,7 @@ export const mutationTypes = {
 
 export const actionTypes = {
   getData: '[admin] Get data',
+  getFilteredApplications: '[admin] Get filtered applications action',
   setApplicationStatus: '[admin] Set application status',
   setSettlementStatus: '[admin] Set settlement status',
   setSearchString: '[admin] Set search string action',
@@ -91,6 +92,7 @@ const mutations = {
   }
 }
 
+//вынести гетеры в отдельный тип и переменную
 const actions = {
   [actionTypes.getData](context, {apiUrl}) {
     return new Promise(resolve => {
@@ -183,11 +185,88 @@ const actions = {
     context.commit(mutationTypes.setFilter, {
       filter: []
     })
+  },
+  [actionTypes.getFilteredApplications](context, {input}) {
+    //let output = context.state.data
+    let output = input
+    let filter = context.state.filter
+
+    if (filter.length) {
+      if (output.length) {
+        output = output.filter(application => {
+          let isPass = []
+
+          state.admin.filter.map(item => {
+            switch (item.by) {
+              case 'payment_method':
+                if (application.applicant.payment_method.id == item.value)
+                  isPass.push(true)
+                break
+              case 'application_status':
+                if (application.status == item.value) isPass.push(true)
+                break
+              case 'settlement_status':
+                if (application.settlement.status == item.value)
+                  isPass.push(true)
+                break
+              case 'study_place':
+                if (application.applicant.study_place.id == item.value)
+                  isPass.push(true)
+                break
+            }
+          })
+
+          return isPass.length == state.admin.filter.length
+        })
+      }
+    }
+
+    return output
+  }
+}
+
+const getters = {
+  getFilteredApplications: state => input => {
+    let output = input
+    let filter = state.filter
+
+    if (filter.length) {
+      if (output.length) {
+        output = output.filter(application => {
+          let isPass = []
+
+          state.admin.filter.map(item => {
+            switch (item.by) {
+              case 'payment_method':
+                if (application.applicant.payment_method.id == item.value)
+                  isPass.push(true)
+                break
+              case 'application_status':
+                if (application.status == item.value) isPass.push(true)
+                break
+              case 'settlement_status':
+                if (application.settlement.status == item.value)
+                  isPass.push(true)
+                break
+              case 'study_place':
+                if (application.applicant.study_place.id == item.value)
+                  isPass.push(true)
+                break
+            }
+          })
+
+          return isPass.length == state.admin.filter.length
+        })
+      }
+    }
+
+    return output
   }
 }
 
 export default {
   state,
   actions,
-  mutations
+  mutations,
+  getters
 }

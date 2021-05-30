@@ -1,5 +1,6 @@
 <template>
   <div class="admin-filter__item">
+    <span>{{ $t(`admin.${filterName}`) }}</span>
     <button
       class="btn btn-secondary dropdown-toggle"
       type="button"

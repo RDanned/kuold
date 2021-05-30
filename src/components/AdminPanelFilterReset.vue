@@ -1,5 +1,5 @@
 <template>
-  <button class="btn btn-primary" @click="resetFilter">
+  <button class="btn btn-primary admin-filter__reset" @click="resetFilter">
     Сбросить фильтр
   </button>
 </template>

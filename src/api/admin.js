@@ -60,11 +60,21 @@ const getSettlementStatuses = () => {
   ]
 }
 
+const getReport = applicationsIds => {
+  return axios.get('get_report/', {
+    responseType: 'blob',
+    params: {
+      applications_ids: applicationsIds.join(',')
+    }
+  })
+}
+
 export default {
   getApplicants,
   setStatus,
   deleteApplication,
   restoreApplication,
   getApplicationStatuses,
-  getSettlementStatuses
+  getSettlementStatuses,
+  getReport
 }

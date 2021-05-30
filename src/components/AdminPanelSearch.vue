@@ -1,5 +1,5 @@
 <template>
-  <div class="input-group mb-3">
+  <div class="input-group mb-3 col-12">
     <span class="input-group-text" id="basic-addon">Поиск по ФИО</span>
     <input
       type="text"

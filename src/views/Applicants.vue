@@ -91,6 +91,7 @@
 import '@/assets/libs/bootstrap/js/bootstrap'
 import {mapState} from 'vuex'
 import {actionTypes} from '@/store/modules/admin'
+import {getFilteredApplications} from '@/helpers/applicants'
 import ListItem from '@/components/ListItem'
 import ListItemDetail from '@/components/ListItemDetail'
 import AdminPanel from '@/components/AdminPanel'
@@ -105,6 +106,9 @@ export default {
     }
   },
   computed: {
+    /*...mapGetters({
+      getFilteredApplications: 'getFilteredApplications'
+    }),*/
     ...mapState({
       sort: state => state.admin.sortApplications,
       data: state => {
@@ -173,11 +177,12 @@ export default {
           })
         }
 
-        if (state.admin.filter.length) {
-          console.log('filter')
-          console.log(state.admin.filter)
-          console.log(output.length)
-
+        output = getFilteredApplications({
+          filter: state.admin.filter,
+          applications: output
+        })
+        //output = this.$store.admin.getters.getFilteredApplications(output)
+        /*if (state.admin.filter.length) {
           if (output.length) {
             output = output.filter(application => {
               let isPass = []
@@ -199,32 +204,13 @@ export default {
                     if (application.applicant.study_place.id == item.value)
                       isPass.push(true)
                     break
-                  /*default:
-                    isPass = true*/
                 }
-
-                /*if (item.by == 'payment_method') {
-                  if (application.applicant.payment_method.id == item.value)
-                    isPass = true
-                } else if (item.by == 'application_status') {
-                  if (application.status == item.value) isPass = true
-                } else if (item.by == 'settlement_status') {
-                  if (application.settlement.status == item.value) isPass = true
-                } else if (item.by == 'study_place') {
-                  console.log(item.by)
-                  if (application.applicant.study_place.id == item.value)
-                    isPass = true
-                }*/
               })
 
-              console.log('is pass')
-              console.log(isPass)
-
-              if (isPass.length == state.admin.filter.length) return true
-              return false
+              return isPass.length == state.admin.filter.length
             })
           }
-        }
+        }*/
 
         return output
       }

@@ -1,7 +1,7 @@
 <template>
-  <div class="admin-panel">
+  <div class="admin-panel row">
     <admin-panel-search />
-    <div class="admin-filter">
+    <div class="admin-filter col-6">
       <admin-panel-filter-item
         v-for="(item, index) in formData"
         :key="index"
@@ -9,22 +9,27 @@
         :filter-values="item"
       />
       <admin-panel-filter-reset />
-      <button class="btn btn-primary" @click="print">print</button>
     </div>
+    <admin-panel-print />
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 import formApi from '@/api/form'
 import adminApi from '@/api/admin'
 import AdminPanelSearch from '@/components/AdminPanelSearch'
 import AdminPanelFilterItem from '@/components/AdminPanelFilterItem'
 import AdminPanelFilterReset from '@/components/AdminPanelFilterReset'
+import AdminPanelPrint from '@/components/AdminPanelPrint'
 
 export default {
   name: 'AdminPanel',
-  components: {AdminPanelSearch, AdminPanelFilterItem, AdminPanelFilterReset},
+  components: {
+    AdminPanelSearch,
+    AdminPanelFilterItem,
+    AdminPanelFilterReset,
+    AdminPanelPrint
+  },
   data: function() {
     return {
       formData: {}
@@ -42,18 +47,6 @@ export default {
         settlement_status: adminApi.getSettlementStatuses()
       }
     })
-  },
-  methods: {
-    print: function() {
-      axios.get('get_report/', {responseType: 'blob'}).then(response => {
-        const url = window.URL.createObjectURL(new Blob([response.data]))
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', 'реестр студентов(всех).docx')
-        document.body.appendChild(link)
-        link.click()
-      })
-    }
   }
 }
 </script>
