@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal">
+  <transition name="modal" v-if="application">
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
@@ -87,12 +87,9 @@
           </div>
 
           <div class="modal-footer">
-            <!-- <slot name="footer">
-              default footer
-            </slot> -->
             <button
               class="btn btn-primary modal-default-button"
-              @click="$emit('close')"
+              @click="closeDetail"
             >
               OK
             </button>
@@ -104,18 +101,19 @@
 </template>
 <script>
 import '@/assets/css/modal.css'
-import {uuid} from 'vue-uuid' // Import uuid
+import {mapState} from 'vuex'
+import {actionTypes as modalActions} from '@/store/modules/modal'
 
 export default {
-  name: 'Modal',
-  props: {
-    application: {
-      type: Object
-    }
+  name: 'ListItemDetail',
+  computed: {
+    ...mapState({
+      application: state => state.modal.applicationDetail
+    })
   },
-  data() {
-    return {
-      uuid: uuid.v1()
+  methods: {
+    closeDetail: function() {
+      this.$store.dispatch(modalActions.resetApplicationDetail)
     }
   }
 }

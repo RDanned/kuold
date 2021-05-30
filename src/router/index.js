@@ -7,6 +7,7 @@ import Admin from '@/views/Admin'
 //import Settlement from '@/views/Settlement'
 import AdminBasket from '@/views/admin/AdminBasket'
 import AdminSettlement from '@/views/admin/AdminSettlement'
+import AdminEvicted from '@/views/admin/AdminEvicted'
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,11 @@ const routes = [
         path: 'settlement/',
         name: 'settlement',
         component: AdminSettlement
+      },
+      {
+        path: 'evicted/',
+        name: 'evicted',
+        component: AdminEvicted
       },
       {
         path: 'basket/',

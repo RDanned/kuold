@@ -94,14 +94,14 @@ import {actionTypes} from '@/store/modules/admin'
 import {
   getFilteredApplications,
   getSortedApplications,
-  isInSettlement
+  isInEvicted
 } from '@/helpers/applicants'
 import ListItem from '@/components/ListItem'
 import ListItemDetail from '@/components/ListItemDetail'
 import AdminPanel from '@/components/AdminPanel'
 
 export default {
-  name: 'AdminSettlement',
+  name: 'AdminEvicted',
   components: {ListItem, ListItemDetail, AdminPanel},
   data() {
     return {
@@ -134,7 +134,7 @@ export default {
 
         if (state.admin.data.length)
           output = state.admin.data.filter(application => {
-            if (isInSettlement(application)) return true
+            if (isInEvicted(application)) return true
           })
 
         output = getSortedApplications({

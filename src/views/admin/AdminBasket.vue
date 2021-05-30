@@ -1,15 +1,72 @@
 <template>
   <div>
     <admin-panel />
-    <table class="table table-striped table-dark">
+    <table class="table table-striped table-dark table-bordered">
       <thead>
         <tr>
-          <td>#</td>
-          <td>ФИО</td>
+          <td>
+            <div
+              class="sort-btn"
+              data-by="id"
+              data-direction="desc"
+              @click="sortApplications"
+            >
+              <span class="sort-btn__text">#</span>
+              <span class="sort-btn__icon">
+                <font-awesome-icon
+                  v-if="sort.direction === 'asc' && sort.by === 'id'"
+                  icon="sort-amount-up"
+                />
+                <font-awesome-icon v-else icon="sort-amount-down-alt" />
+              </span>
+            </div>
+          </td>
+
+          <td>
+            <div
+              class="sort-btn"
+              data-by="full_name"
+              data-direction="desc"
+              @click="sortApplications"
+            >
+              <span class="sort-btn__text">ФИО</span>
+              <span class="sort-btn__icon">
+                <font-awesome-icon
+                  v-if="sort.direction === 'desc' && sort.by === 'full_name'"
+                  icon="sort-alpha-down-alt"
+                />
+                <font-awesome-icon v-else icon="sort-alpha-down" />
+              </span>
+            </div>
+          </td>
+
           <td>Пол</td>
+
           <td>Место обучения</td>
-          <td>Статус заявки</td>
+
+          <td>
+            <div
+              class="sort-btn"
+              data-by="application_status"
+              data-direction="desc"
+              @click="sortApplications"
+            >
+              <span class="sort-btn__text"> Статус заявки</span>
+              <span class="sort-btn__icon">
+                <font-awesome-icon
+                  v-if="
+                    sort.direction === 'desc' &&
+                      sort.by === 'application_status'
+                  "
+                  icon="sort-amount-up"
+                />
+                <font-awesome-icon v-else icon="sort-amount-down-alt" />
+              </span>
+            </div>
+          </td>
+
           <td>Статус вселения</td>
+
           <td>Действия</td>
         </tr>
       </thead>
@@ -34,12 +91,17 @@
 import '@/assets/libs/bootstrap/js/bootstrap'
 import {mapState} from 'vuex'
 import {actionTypes} from '@/store/modules/admin'
+import {
+  getFilteredApplications,
+  getSortedApplications,
+  isInBasket
+} from '@/helpers/applicants'
 import ListItem from '@/components/ListItem'
 import ListItemDetail from '@/components/ListItemDetail'
 import AdminPanel from '@/components/AdminPanel'
 
 export default {
-  name: 'Applicants',
+  name: 'AdminBasket',
   components: {ListItem, ListItemDetail, AdminPanel},
   data() {
     return {
@@ -49,7 +111,10 @@ export default {
   },
   computed: {
     ...mapState({
+      sort: state => state.admin.sortApplications,
       data: state => {
+        let output = []
+
         let searchString = state.admin.searchString
 
         if (searchString) {
@@ -67,12 +132,22 @@ export default {
           })
         }
 
-        if (state.admin.data)
-          return state.admin.data.filter(application => {
-            console.log(application.deleted)
-            if (application.deleted) return true
+        if (state.admin.data.length)
+          output = state.admin.data.filter(application => {
+            if (isInBasket(application)) return true
           })
-        else return []
+
+        output = getSortedApplications({
+          sort: state.admin.sortApplications,
+          applications: output
+        })
+
+        output = getFilteredApplications({
+          filter: state.admin.filter,
+          applications: output
+        })
+
+        return output
       }
     })
   },
@@ -89,6 +164,20 @@ export default {
     },
     closeModal: function() {
       this.showModal = false
+    },
+    sortApplications: function(e) {
+      let by = e.currentTarget.dataset.by
+      let direction = e.currentTarget.dataset.direction
+
+      if (direction === 'desc') {
+        direction = 'asc'
+        e.currentTarget.dataset.direction = 'asc'
+      } else if (direction === 'asc') {
+        direction = 'desc'
+        e.currentTarget.dataset.direction = 'desc'
+      }
+
+      this.$store.dispatch(actionTypes.setApplicationSort, {by, direction})
     }
   }
 }

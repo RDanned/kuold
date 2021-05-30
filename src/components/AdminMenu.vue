@@ -35,6 +35,19 @@
       class="nav-link"
       id="v-pills-home-tab"
       data-toggle="pill"
+      :to="{name: 'evicted'}"
+      role="tab"
+      aria-controls="v-pills-home"
+      aria-selected="true"
+      active-class="active"
+      exact
+    >
+      Список выселенных
+    </router-link>
+    <router-link
+      class="nav-link"
+      id="v-pills-home-tab"
+      data-toggle="pill"
       :to="{name: 'basket'}"
       role="tab"
       aria-controls="v-pills-home"

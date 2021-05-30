@@ -70,28 +70,26 @@
           <td>Действия</td>
         </tr>
       </thead>
-      <tbody v-if="data">
+      <tbody>
         <list-item
           v-for="application in data"
           :key="application.id"
           :application="application"
-          @open="openModal"
         />
       </tbody>
     </table>
-    <list-item-detail
-      v-if="showModal"
-      @close="closeModal"
-      :application="modalApplication"
-    >
-    </list-item-detail>
+    <list-item-detail />
   </div>
 </template>
 <script>
 import '@/assets/libs/bootstrap/js/bootstrap'
 import {mapState} from 'vuex'
 import {actionTypes} from '@/store/modules/admin'
-import {getFilteredApplications} from '@/helpers/applicants'
+import {
+  getFilteredApplications,
+  getSortedApplications,
+  isInApplicants
+} from '@/helpers/applicants'
 import ListItem from '@/components/ListItem'
 import ListItemDetail from '@/components/ListItemDetail'
 import AdminPanel from '@/components/AdminPanel'
@@ -106,9 +104,6 @@ export default {
     }
   },
   computed: {
-    /*...mapGetters({
-      getFilteredApplications: 'getFilteredApplications'
-    }),*/
     ...mapState({
       sort: state => state.admin.sortApplications,
       data: state => {
@@ -133,84 +128,18 @@ export default {
 
         if (state.admin.data.length)
           output = state.admin.data.filter(application => {
-            if (
-              !application.deleted &&
-              (application.status == 0 || application.settlement.status == 0) &&
-              (application.status == 1 || application.settlement.status == 0)
-            )
-              return true
+            if (isInApplicants(application)) return true
           })
 
-        if (output.length) {
-          output = output.sort((app1, app2) => {
-            if (state.admin.sortApplications.by === 'id') {
-              if (state.admin.sortApplications.direction == 'desc') {
-                if (app1.id > app2.id) return 1
-                else return -1
-              } else if (state.admin.sortApplications.direction == 'asc') {
-                if (app1.id > app2.id) return -1
-                else return 1
-              }
-            } else if (state.admin.sortApplications.by === 'full_name') {
-              if (state.admin.sortApplications.direction == 'desc') {
-                if (app1.applicant.full_name < app2.applicant.full_name)
-                  return 1
-                else return -1
-              }
-              if (state.admin.sortApplications.direction == 'asc') {
-                if (app1.applicant.full_name < app2.applicant.full_name)
-                  return -1
-                else return 1
-              }
-            } else if (
-              state.admin.sortApplications.by === 'application_status'
-            ) {
-              if (state.admin.sortApplications.direction == 'desc') {
-                if (app1.status < app2.status) return 1
-                else return -1
-              }
-              if (state.admin.sortApplications.direction == 'asc') {
-                if (app1.status < app2.status) return -1
-                else return 1
-              }
-            }
-          })
-        }
+        output = getSortedApplications({
+          sort: state.admin.sortApplications,
+          applications: output
+        })
 
         output = getFilteredApplications({
           filter: state.admin.filter,
           applications: output
         })
-        //output = this.$store.admin.getters.getFilteredApplications(output)
-        /*if (state.admin.filter.length) {
-          if (output.length) {
-            output = output.filter(application => {
-              let isPass = []
-
-              state.admin.filter.map(item => {
-                switch (item.by) {
-                  case 'payment_method':
-                    if (application.applicant.payment_method.id == item.value)
-                      isPass.push(true)
-                    break
-                  case 'application_status':
-                    if (application.status == item.value) isPass.push(true)
-                    break
-                  case 'settlement_status':
-                    if (application.settlement.status == item.value)
-                      isPass.push(true)
-                    break
-                  case 'study_place':
-                    if (application.applicant.study_place.id == item.value)
-                      isPass.push(true)
-                    break
-                }
-              })
-
-              return isPass.length == state.admin.filter.length
-            })
-          }
-        }*/
 
         return output
       }
@@ -221,15 +150,6 @@ export default {
     this.$store.dispatch(actionTypes.getData, {apiUrl: 'applicants'})
   },
   methods: {
-    openModal: function(id) {
-      this.modalApplication = this.data.filter(app => {
-        return app.id == id
-      })[0]
-      this.showModal = true
-    },
-    closeModal: function() {
-      this.showModal = false
-    },
     sortApplications: function(e) {
       let by = e.currentTarget.dataset.by
       let direction = e.currentTarget.dataset.direction

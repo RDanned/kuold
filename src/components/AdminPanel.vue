@@ -20,6 +20,7 @@ import adminApi from '@/api/admin'
 import AdminPanelSearch from '@/components/AdminPanelSearch'
 import AdminPanelFilterItem from '@/components/AdminPanelFilterItem'
 import AdminPanelFilterReset from '@/components/AdminPanelFilterReset'
+//todo: сделат отдельную страницу печати с настройкой
 import AdminPanelPrint from '@/components/AdminPanelPrint'
 
 export default {

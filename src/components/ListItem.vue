@@ -90,7 +90,8 @@
   </tr>
 </template>
 <script>
-import {actionTypes} from '@/store/modules/admin'
+import {actionTypes as adminActions} from '@/store/modules/admin'
+import {actionTypes as modalActions} from '@/store/modules/modal'
 
 export default {
   name: 'ListItem',
@@ -146,34 +147,37 @@ export default {
   },
   methods: {
     openModal: function() {
-      this.$emit('open', this.application.id)
-      //this.showModal = true
-    },
-    closeModal: function() {
-      this.$emit('close', 'test')
-      //this.showModal = false
+      this.$store.dispatch(modalActions.setApplicationDetail, {
+        application: this.application
+      })
     },
     changeApplicationStatus: function(e) {
       if (e.currentTarget.dataset.status != this.application.status)
-        this.$store.dispatch(actionTypes.setApplicationStatus, {
+        this.$store.dispatch(adminActions.setApplicationStatus, {
           applicationId: this.application.id,
           status: Number(e.currentTarget.dataset.status)
         })
     },
     changeSettlementStatus: function(e) {
-      if (e.currentTarget.dataset.status != this.application.settlement.status)
-        this.$store.dispatch(actionTypes.setSettlementStatus, {
+      let newStatus = e.currentTarget.dataset.status
+      if (newStatus != this.application.settlement.status) {
+        this.$store.dispatch(adminActions.setSettlementStatus, {
           applicationId: this.application.id,
           status: Number(e.currentTarget.dataset.status)
         })
+      } else if (newStatus == 2) {
+        this.$store.dispatch(modalActions.setEvictApplication, {
+          application: this.application
+        })
+      }
     },
     deleteApplication: function() {
-      this.$store.dispatch(actionTypes.softDeleteApplication, {
+      this.$store.dispatch(adminActions.softDeleteApplication, {
         applicationId: this.application.id
       })
     },
     restoreApplication: function() {
-      this.$store.dispatch(actionTypes.restoreApplication, {
+      this.$store.dispatch(adminActions.restoreApplication, {
         applicationId: this.application.id
       })
     }
