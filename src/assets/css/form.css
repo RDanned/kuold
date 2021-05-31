@@ -12,9 +12,18 @@ body {
   scroll-behavior: smooth;
 }
 
-.form-wrapper {
+/*.form-wrapper {
+  !* height: 100%; *!
+  background: linear-gradient(rgba(248, 249, 250,.94), rgba(248, 249, 250,0.94)), url(../img/logo_bg.png);
+}*/
+
+html {
   /* height: 100%; */
   background: linear-gradient(rgba(248, 249, 250,.94), rgba(248, 249, 250,0.94)), url(../img/logo_bg.png);
+}
+
+body {
+  background-color: transparent !important;
 }
 
 .logo {

@@ -11,6 +11,7 @@
       <admin-panel-filter-reset />
     </div>
     <admin-panel-print />
+    <!--    <router-link :to="{name: 'print'}">Распечатать (2 вариант)</router-link>-->
   </div>
 </template>
 

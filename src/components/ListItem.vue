@@ -2,9 +2,14 @@
   <tr>
     <td>{{ application.applicant.id }}</td>
     <td>
-      {{
-        `${application.applicant.last_name} ${application.applicant.first_name} ${application.applicant.middle_name}`
-      }}
+      <router-link
+        :to="{name: 'applicant', params: {id: application.id}}"
+        class="link-info"
+      >
+        {{
+          `${application.applicant.last_name} ${application.applicant.first_name} ${application.applicant.middle_name}`
+        }}
+      </router-link>
     </td>
     <td>{{ $t('form.gender.' + application.applicant.gender) }}</td>
     <td>{{ application.applicant.study_place.name_ru }}</td>

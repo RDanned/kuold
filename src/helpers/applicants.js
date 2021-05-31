@@ -88,7 +88,7 @@ export const isInSettlement = application => {
 }
 
 export const isInBasket = application => {
-  return !application.deleted && application.status == 2
+  return application.deleted || application.status == 2
 }
 
 export const isInEvicted = application => {

@@ -5,22 +5,22 @@ const state = {
 
 export const mutationTypes = {
   setApplicationDetail: '[modal] Set application detail mutation',
-  setEvictApplication: '[modal] Set application detail mutation'
+  setEvictApplication: '[modal] Set application evict mutation'
 }
 
 export const actionTypes = {
   setApplicationDetail: '[modal] Set application detail action',
   resetApplicationDetail: '[modal] Reset evict application detail action',
-  setEvictApplication: '[modal] Set evict application detail action',
-  resetEvictApplication: '[modal] Reset evict application detail action'
+  setEvictApplication: '[modal] Set evict application evict action',
+  resetEvictApplication: '[modal] Reset evict application evict action'
 }
 
 const mutations = {
   [mutationTypes.setApplicationDetail](state, payload) {
     state.applicationDetail = payload.application
   },
-  [mutationTypes.setApplicationDetail](state, payload) {
-    state.setEvictApplication = payload.application
+  [mutationTypes.setEvictApplication](state, payload) {
+    state.evictApplication = payload.application
   }
 }
 

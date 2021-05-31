@@ -111,6 +111,9 @@ export default {
       application: state => state.modal.applicationDetail
     })
   },
+  mounted() {
+    console.log('init modal')
+  },
   methods: {
     closeDetail: function() {
       this.$store.dispatch(modalActions.resetApplicationDetail)

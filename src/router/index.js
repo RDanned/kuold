@@ -8,6 +8,7 @@ import Admin from '@/views/Admin'
 import AdminBasket from '@/views/admin/AdminBasket'
 import AdminSettlement from '@/views/admin/AdminSettlement'
 import AdminEvicted from '@/views/admin/AdminEvicted'
+import AdminApplicationDetail from '@/views/admin/AdminApplicationDetail'
 
 Vue.use(VueRouter)
 
@@ -41,6 +42,11 @@ const routes = [
         components: {
           default: Applicants
         }
+      },
+      {
+        path: 'applicants/:id/',
+        name: 'applicant',
+        component: AdminApplicationDetail
       },
       {
         path: 'settlement/',

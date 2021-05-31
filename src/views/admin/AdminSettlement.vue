@@ -117,21 +117,6 @@ export default {
 
         let searchString = state.admin.searchString
 
-        if (searchString) {
-          return state.admin.data.filter(application => {
-            let fullName =
-              application.applicant.last_name +
-              application.applicant.first_name +
-              application.applicant.middle_name
-
-            let regex = new RegExp(`(${searchString})`, 'gi')
-
-            if (fullName.search(regex) != -1) return true
-
-            return false
-          })
-        }
-
         if (state.admin.data.length)
           output = state.admin.data.filter(application => {
             if (isInSettlement(application)) return true
@@ -146,6 +131,21 @@ export default {
           filter: state.admin.filter,
           applications: output
         })
+
+        if (searchString) {
+          output = output.filter(application => {
+            let fullName =
+              application.applicant.last_name +
+              application.applicant.first_name +
+              application.applicant.middle_name
+
+            let regex = new RegExp(`(${searchString})`, 'gi')
+
+            if (fullName.search(regex) != -1) return true
+
+            return false
+          })
+        }
 
         return output
       }
