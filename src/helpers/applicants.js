@@ -75,7 +75,7 @@ export const isInApplicants = application => {
   return (
     !application.deleted &&
     ((application.status == 0 && application.settlement.status == 0) ||
-      (application.status == 0 && application.settlement.status == 1))
+      (application.status == 1 && application.settlement.status == 0))
   )
 }
 

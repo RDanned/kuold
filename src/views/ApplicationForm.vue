@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-light form-wrapper">
+  <div class="form-wrapper">
     <preloader v-if="isLoading" />
     <warning />
     <div class="container form-page">

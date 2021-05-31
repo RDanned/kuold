@@ -9,6 +9,7 @@ import AdminBasket from '@/views/admin/AdminBasket'
 import AdminSettlement from '@/views/admin/AdminSettlement'
 import AdminEvicted from '@/views/admin/AdminEvicted'
 import AdminApplicationDetail from '@/views/admin/AdminApplicationDetail'
+import AdminLogin from '@/views/admin/AdminLogin'
 
 Vue.use(VueRouter)
 
@@ -31,6 +32,11 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/About.vue')
+  },
+  {
+    path: '/admin/login/',
+    name: 'login',
+    component: AdminLogin
   },
   {
     path: '/admin/',
