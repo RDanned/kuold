@@ -10,6 +10,7 @@ import AdminSettlement from '@/views/admin/AdminSettlement'
 import AdminEvicted from '@/views/admin/AdminEvicted'
 import AdminApplicationDetail from '@/views/admin/AdminApplicationDetail'
 import AdminLogin from '@/views/admin/AdminLogin'
+import {getItem} from '@/helpers/persistanceStorage'
 
 Vue.use(VueRouter)
 
@@ -41,6 +42,7 @@ const routes = [
   {
     path: '/admin/',
     component: Admin,
+    meta: {needAuth: true},
     children: [
       {
         path: '',
@@ -76,6 +78,21 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.needAuth)) {
+    if (!getItem('token')) {
+      next({
+        path: '/admin/login',
+        query: {redirect: to.fullPath}
+      })
+    } else {
+      next()
+    }
+  } else {
+    next() // всегда так или иначе нужно вызвать next()!
+  }
 })
 
 export default router

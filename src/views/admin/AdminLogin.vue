@@ -59,8 +59,8 @@ export default {
         .then(response => {
           console.log(response.data)
           setItem('token', response.data.token)
+          this.$router.push({name: 'applicants'})
         })
-      //this.$router.push({name: 'applicants'})
     }
   }
 }
